@@ -77,6 +77,19 @@ class Menu extends Model
         return static::$var_map;
     }
 
+    static function UriTops () {
+        $uris = static::where('is_top', 1)->where('parent_id', 0)->whereNotNull('uri')->select('id', 'title', 'uri')->get();
+        $result = [];
+        foreach ($uris as $uri) $result[$uri['uri']] = $uri;
+        return $result;
+    }
+    static function Uris () {
+        $uris = static::where('is_top', 0)->whereNotNull('uri')->select('id', 'title', 'uri')->get();
+        $result = [];
+        foreach ($uris as $uri) $result[$uri['uri']] = $uri;
+        return $result;
+    }
+
     function parent () {
         // 父表: 子表关联键 -> 父键
         return $this->belongsTo(static::class, 'parent_id')->select('id', 'title', 'uri', 'icon');

@@ -20,13 +20,14 @@ class CreateAdminRolesTable extends Migration
             $table->increments('id');
             $table->integer('parent_id')->unsigned()->default(0)->comment('父级角色');
 
-            $table->tinyInteger('type')->default(0)->comment('角色类型:0, 私有角色; 1,开放角色; 2,自定义角色; 3,模板角色');
+            $table->tinyInteger('type')->default(0)->comment('角色类型:0, 私有角色(管理员); 1,开放角色; 2,自定义角色; 3,模板角色');
             $table->integer('org_id')->unsigned()->default(0)->comment('私有角色定义');
             $table->integer('template_id')->unsigned()->default(0)->comment('模板id');
 
-            $table->char('key', 16)->nullable()->comment('角色识别码, 英文, 模板角色可重复');
+            $table->char('code', 16)->nullable()->comment('角色识别码, 英文, 模板角色可重复');
             $table->string('name')->comment('角色名称 - 中文显示');
             $table->string('description')->nullable()->comment('角色描述');
+            $table->string('tel')->nullable()->comment('部门电话');
         });
     }
 

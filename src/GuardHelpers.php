@@ -25,7 +25,7 @@ trait GuardHelpers
      */
     public function authenticate()
     {
-        $token = $this->request->header('api-token');
+        $token = $this->request->auth_token = $this->request->hasHeader('api-token') ? $this->request->header('api-token') : $this->request->get('api_token');
         if (!LogiAction::where('data', $token)->first()) {
             throw new ErrorCodeException(200, '需要登录');
         }

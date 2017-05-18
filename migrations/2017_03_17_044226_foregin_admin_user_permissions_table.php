@@ -14,10 +14,10 @@ class ForeginAdminUserPermissionsTable extends Migration
     public function up()
     {
         // 用户权限外键
-        Schema::table('admin_user_permissions', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('admin_users')->onDelete('cascade');
-            $table->foreign('permission_id')->references('id')->on('admin_permissions')->onDelete('cascade');
-        });
+//        Schema::table('admin_user_permissions', function (Blueprint $table) {
+//            $table->foreign('user_id')->references('id')->on('admin_users')->onDelete('cascade');
+//            $table->foreign('permission_id')->references('id')->on('admin_permissions')->onDelete('cascade');
+//        });
     }
 
 }

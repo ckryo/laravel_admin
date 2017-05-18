@@ -11,6 +11,19 @@ class Role extends Model
     protected $connection = 'mysql';
     public $timestamps = false;
 
+    protected $fillable = ['name', 'code', 'type', 'org_id', 'tel', 'description'];
+
+
+    // 用户列表
+    function users() {
+        return $this->hasMany(User::class, 'role_id');
+    }
+
+    // 用户合计
+    function user_count() {
+        return $this->users->count();
+    }
+
 
     /**
      * 创建角色核心方法

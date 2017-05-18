@@ -28,7 +28,7 @@ class Auth
         }
 
         $user = null;
-        $token = $this->request->header('api-token');
+        $token = $this->request->auth_token;
 
         if (! empty($token)) { // 从驱动中获取 用户信息
             $user = User::where('remember_token', $token)->first();

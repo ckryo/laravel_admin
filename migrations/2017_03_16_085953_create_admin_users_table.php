@@ -16,7 +16,7 @@ class CreateAdminUsersTable extends Migration
         // 账号信息表
         Schema::create('admin_users', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('role_id')->unsigned()->comment('角色信息');
+            $table->integer('role_id')->unsigned()->default(0)->comment('角色信息');
             $table->integer('website_id')->unsigned()->default(0)->comment('平台信息');
             $table->integer('org_id')->unsigned()->default(0)->comment('账号归属, 公司信息');
 

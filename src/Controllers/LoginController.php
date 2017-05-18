@@ -24,12 +24,14 @@ class LoginController extends Controller
             'menu' => [
                 'top' => Menu::buildMenuTop($user),
                 'map' => Menu::buildMenuMap($user),
+                'uri_tops' => Menu::UriTops(),
+                'uris' => Menu::Uris()
             ]
         ];
         if ($token) {
             $res['api_token'] = $token;
         } else {
-            $token = $request->header('api-token');
+            $token = $request->auth_token;
             Logi::login($user->id, $token, true);
             $res['api_token'] = $token;
         }

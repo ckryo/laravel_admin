@@ -2,7 +2,9 @@
 
 namespace Ckryo\Laravel\Admin;
 
+use Ckryo\Laravel\Admin\Models\User;
 use Ckryo\Laravel\Http\ErrorCode;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 
 class AdminServiceProvider extends ServiceProvider
@@ -22,6 +24,11 @@ class AdminServiceProvider extends ServiceProvider
         foreach ($errCodes as $model => $codes) {
             $errorCode->regist($model, $codes);
         }
+
+        Validator::extend('admin_account', function ($attribute, $value, $parameters, $validator) {
+            $account = $this->app->make('auth')->user()->org->account . '@' . $value;
+            return User::where('account', $account)->count() === 0;
+        });
     }
 
     public function register()

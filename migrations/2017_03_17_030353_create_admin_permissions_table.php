@@ -18,7 +18,7 @@ class CreateAdminPermissionsTable extends Migration
             $table->increments('id');
             $table->integer('parent_id')->unsigned()->default(0)->comment('父级权限');
 
-            $table->char('key', 5)->comment('权限验证符, 唯一');
+            $table->char('key', 15)->comment('权限验证符, 唯一');
             $table->string('name')->comment('权限名称 - 中文显示');
             $table->string('description')->nullable()->comment('权限描述');
         });
