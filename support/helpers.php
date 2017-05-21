@@ -6,7 +6,7 @@
  * Time: 上午9:57
  */
 
-if (!function_exists('db_trans')) {
+if (!function_exists('db_transaction')) {
     /**
      * 数据库事务
      * @param Closure $block
