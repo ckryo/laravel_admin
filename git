@@ -21,7 +21,7 @@ $last_tag = $last_tag_v1 . '.' . $last_tag_v2 . '.' . $last_tag_v3;
 $msg = '-';
 if (count($argv) >= 2) $msg = $argv[1];
 
-$cmd = "git add * && git commit -m $msg";
+$cmd = "git add * && git commit -m $msg && git push";
 echo exec($cmd);
 echo "\n";
 echo exec("git tag $last_tag && git push --tag");
