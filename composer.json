@@ -20,6 +20,7 @@
         "ckryo/laravel_http": ">=5.1"
     },
     "autoload": {
+        "files": [ "support/helpers.php" ],
         "psr-4": {
             "Ckryo\\Laravel\\Admin\\": "src"
         }
