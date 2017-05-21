@@ -9,10 +9,10 @@
 if (!function_exists('db_trans')) {
     /**
      * 数据库事务
-     * @param void $block
+     * @param Closure $block
      * @return mixed
      */
-    function db_transaction ($block) {
+    function db_transaction (Closure $block) {
         return \Illuminate\Support\Facades\DB::transaction($block);
     }
 }
