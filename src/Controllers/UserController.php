@@ -3,7 +3,7 @@
 namespace Ckryo\Laravel\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
-use Ckryo\Laravel\Admin\Auth;
+use Ckryo\Laravel\Auth\Auth;
 use Ckryo\Laravel\Admin\Models\Role;
 use Ckryo\Laravel\Admin\Models\User;
 use Ckryo\Laravel\Admin\Models\UserInfoDefault;
