@@ -29,11 +29,11 @@ class LoginController extends Controller
             ]
         ];
         if ($token) {
-            $res['auth-token'] = $token;
+            $res['auth_token'] = $token;
         } else {
             $token = $request->auth_token;
             Logi::login($user->id, $token, true);
-            $res['auth-token'] = $token;
+            $res['auth_token'] = $token;
         }
         return response()->ok('登录成功', $res);
     }
