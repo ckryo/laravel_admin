@@ -3,6 +3,7 @@
 namespace Ckryo\Laravel\Admin;
 
 use Ckryo\Laravel\Admin\Models\User;
+use Ckryo\Laravel\Auth\Auth;
 use Ckryo\Laravel\Handler\ErrorCode;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
@@ -15,7 +16,7 @@ class AdminServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(ErrorCode $errorCode)
+    public function boot(ErrorCode $errorCode, Auth $auth)
     {
         $this->loadRoutesFrom(__DIR__.'/routes.php');
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
@@ -25,8 +26,8 @@ class AdminServiceProvider extends ServiceProvider
             $errorCode->regist($model, $codes);
         }
 
-        Validator::extend('admin_account', function ($attribute, $value, $parameters, $validator) {
-            $account = $this->app->make('auth')->user()->org->account . '@' . $value;
+        Validator::extend('admin_account', function ($attribute, $value, $parameters, $validator) use ($auth) {
+            $account = $auth->user()->org->account . '@' . $value;
             return User::where('account', $account)->count() === 0;
         });
     }
