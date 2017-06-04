@@ -23,7 +23,7 @@ class Menu extends Model
      * @param User $user
      * @return array 菜单数组
      */
-    static function tree(User $user) {
+    static function tree($user) {
         if (static::$var_tree) return self::$var_tree;
         return static::$var_tree = static::where('is_top', 1)->where('parent_id', 0)->get();
     }
@@ -62,7 +62,7 @@ class Menu extends Model
         return $menus;
     }
 
-    static public function buildMenuTop(User $user) {
+    static public function buildMenuTop($user) {
         if (count(static::$var_top) === 0) {
             return static::$var_top = static::formart(static::tree($user));
         }
@@ -70,7 +70,7 @@ class Menu extends Model
 
     }
 
-    static function buildMenuMap (User $user) {
+    static function buildMenuMap ($user) {
         if (count(static::$var_map) === 0) {
             static::formart(static::tree($user));
         }

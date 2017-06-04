@@ -57,5 +57,4 @@ class LoginController extends Controller
         }
         throw new ErrorCodeException(210);
     }
-
 }
