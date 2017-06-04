@@ -31,7 +31,7 @@ class LoginController extends Controller
         if ($token) {
             $res['auth_token'] = $token;
         } else {
-            $token = $request->auth_token;
+            $token = $request->get('auth-token');
             Logi::login($user->id, $token, true);
             $res['auth_token'] = $token;
         }
