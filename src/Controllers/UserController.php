@@ -120,10 +120,6 @@ class UserController extends Controller
         ]);
     }
 
-    function updateFillables () {
-        return ['name', 'avatar', 'role_id', 'org_id', 'email', 'mobile', 'account', 'password', 'sex', 'qq', 'wechat', 'address', 'birthday'];
-    }
-
     function updateCustom (array $updates, $admin, User $user) {
         $users = array_only($updates, ['name', 'avatar', 'role_id', 'org_id', 'email', 'mobile', 'account', 'password']);
         foreach ($users as $key => $value) {

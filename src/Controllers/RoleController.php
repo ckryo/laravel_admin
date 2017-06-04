@@ -32,6 +32,10 @@ class RoleController extends Controller
         return "角色";
     }
 
+    function updateFillables () {
+        return ['name', 'code', 'type', 'tel', 'description'];
+    }
+
     // 获取角色列表
     function index(Auth $auth) {
         $user = $auth->user();
@@ -48,7 +52,7 @@ class RoleController extends Controller
         return response()->page($roles);
     }
 
-    function storeValidate (Request $request, $admin) {
+    function storeValidate (Request $request, User $admin) {
         $admin_id = $admin->id;
         $this->validate($request, [
             'name' => "required|unique:admin_roles,name,NULL,id,org_id,{$admin_id}",
