@@ -24,7 +24,6 @@
         "ckryo/laravel_expand": "^5.4"
     },
     "autoload": {
-        "files": [ "support/helpers.php" ],
         "psr-4": {
             "Ckryo\\Laravel\\Admin\\": "src"
         }
