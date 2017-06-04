@@ -60,7 +60,7 @@ class UserController extends Controller
         ]);
     }
 
-    function storeValidate (Request $request, User $admin) {
+    function storeValidate (Request $request, $admin) {
         $this->validate($request, [
             'name' => 'required',
             'role_id' => [
@@ -81,7 +81,7 @@ class UserController extends Controller
             'password.digits_between' => '密码必须是6-16位的数字、字符或符号'
         ]);
     }
-    function storeCustom (Request $request, User $admin) {
+    function storeCustom (Request $request, $admin) {
         $account = $admin->account . '@' . $request->account;
         $user = User::create([
             'name' => $request->name,
@@ -103,7 +103,7 @@ class UserController extends Controller
         return $user;
     }
 
-    function updateValidate (Request $request, User $admin) {
+    function updateValidate (Request $request, $admin) {
         $this->validate($request, [
             'role_id' => [
                 Rule::exists('admin_roles', 'id')->where(function ($query) use ($admin) {
@@ -124,7 +124,7 @@ class UserController extends Controller
         return ['name', 'avatar', 'role_id', 'org_id', 'email', 'mobile', 'account', 'password', 'sex', 'qq', 'wechat', 'address', 'birthday'];
     }
 
-    function updateCustom (array $updates, User $admin, User $user) {
+    function updateCustom (array $updates, $admin, User $user) {
         $users = array_only($updates, ['name', 'avatar', 'role_id', 'org_id', 'email', 'mobile', 'account', 'password']);
         foreach ($users as $key => $value) {
             if ($key == 'account') {

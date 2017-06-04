@@ -48,7 +48,7 @@ class RoleController extends Controller
         return response()->page($roles);
     }
 
-    function storeValidate (Request $request, User $admin) {
+    function storeValidate (Request $request, $admin) {
         $admin_id = $admin->id;
         $this->validate($request, [
             'name' => "required|unique:admin_roles,name,NULL,id,org_id,{$admin_id}",
@@ -61,7 +61,7 @@ class RoleController extends Controller
         ]);
     }
 
-    function storeCustom (Request $request, User $admin) {
+    function storeCustom (Request $request, $admin) {
         return Role::create([
             'name' => $request->name,
             'code' => $request->code,
@@ -72,7 +72,7 @@ class RoleController extends Controller
         ]);
     }
 
-    function updateValidate (Request $request, User $admin) {
+    function updateValidate (Request $request, $admin) {
         $admin_id = $admin->id;
         $this->validate($request, [
             'name' => "unique:admin_roles,name,NULL,id,org_id,{$admin_id}",
