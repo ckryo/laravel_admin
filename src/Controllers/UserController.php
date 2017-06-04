@@ -2,21 +2,33 @@
 
 namespace Ckryo\Laravel\Admin\Controllers;
 
-use App\Http\Controllers\Controller;
+use Ckryo\Laravel\App\Http\Controllers\Controller;
 use Ckryo\Laravel\Auth\Auth;
 use Ckryo\Laravel\Admin\Models\Role;
 use Ckryo\Laravel\Admin\Models\User;
-use Ckryo\Laravel\Admin\Models\UserInfoDefault;
-use Ckryo\Laravel\Http\Facades\Logi;
+use Ckryo\Laravel\Expand\ResourceControllerExpand;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
 
-    function __construct()
-    {
+    use ResourceControllerExpand;
+
+    function resourceModel () {
+        return new User;
+    }
+
+    function resourceModelNameKey () {
+        return "name";
+    }
+
+    function resourceName () {
+        return "admin_user";
+    }
+
+    function resourceDescription () {
+        return "用户";
     }
 
     // 获取所有用户信息
@@ -48,11 +60,7 @@ class UserController extends Controller
         ]);
     }
 
-    // 创建用户
-    function store (Request $request, Auth $auth) {
-
-        $admin = $auth->user();
-
+    function storeValidate (Request $request, User $admin) {
         $this->validate($request, [
             'name' => 'required',
             'role_id' => [
@@ -72,34 +80,30 @@ class UserController extends Controller
             'password.required' => '密码不能为空',
             'password.digits_between' => '密码必须是6-16位的数字、字符或符号'
         ]);
-
+    }
+    function storeCustom (Request $request, User $admin) {
         $account = $admin->account . '@' . $request->account;
-        DB::transaction(function () use ($request, $admin, $account) {
-            $user = User::create([
-                'name' => $request->name,
-                'avatar' => $request->avatar,
-                'role_id' => $request->role_id,
-                'org_id' => $admin->org_id,
-                'email' => $request->email,
-                'mobile' => $request->mobile,
-                'account' => $account,
-                'password' => bcrypt($request->password)
-            ]);
-            $user->userInfo()->create([
-                'sex' => $request->get('sex', 0),
-                'qq' => $request->qq,
-                'wechat' => $request->wechat,
-                'address' => $request->address,
-                'birthday' => $request->birthday ? date('Y-m-d', strtotime($request->birthday)) : null
-            ]);
-            Logi::action($admin->id, 'admin_user', $user->id, 'create', '创建了用户:'.$user->name, json_encode($request->all(), JSON_UNESCAPED_UNICODE));
-        });
-        return response()->ok('用户创建成功');
+        $user = User::create([
+            'name' => $request->name,
+            'avatar' => $request->avatar,
+            'role_id' => $request->role_id,
+            'org_id' => $admin->org_id,
+            'email' => $request->email,
+            'mobile' => $request->mobile,
+            'account' => $account,
+            'password' => bcrypt($request->password)
+        ]);
+        $user->userInfo()->create([
+            'sex' => $request->get('sex', 0),
+            'qq' => $request->qq,
+            'wechat' => $request->wechat,
+            'address' => $request->address,
+            'birthday' => $request->birthday ? date('Y-m-d', strtotime($request->birthday)) : null
+        ]);
+        return $user;
     }
 
-    function update(Request $request, Auth $auth, $user_id) {
-        $admin = $auth->user();
-
+    function updateValidate (Request $request, User $admin) {
         $this->validate($request, [
             'role_id' => [
                 Rule::exists('admin_roles', 'id')->where(function ($query) use ($admin) {
@@ -114,42 +118,32 @@ class UserController extends Controller
             'account.admin_account' => '账号已存在',
             'password.digits_between' => '密码必须是6-16位的数字、字符或符号'
         ]);
-
-        $updates = [];
-        foreach ($request->only(['name', 'avatar', 'role_id', 'org_id', 'email', 'mobile', 'account', 'password', 'sex', 'qq', 'wechat', 'address', 'birthday']) as $key => $value) {
-            if ($value) $updates[$key] = $value;
-        }
-
-        if (count($updates) === 0) {
-            return response()->ok('未修改任何数据');
-        }
-
-        DB::transaction(function () use ($updates, $admin, $user_id) {
-            $user = User::find($user_id);
-            if (!$user) throw new \Exception('非法操作,角色不存在');
-            $users = array_only($updates, ['name', 'avatar', 'role_id', 'org_id', 'email', 'mobile', 'account', 'password']);
-            foreach ($users as $key => $value) {
-                if ($key == 'account') {
-                    $user->account = $user->org->account . '@' . $value;
-                } else if ($key == 'password') {
-                    $user->$key = bcrypt($value);
-                } else {
-                    $user->$key = $value;
-                }
-            }
-            $userInfos = array_only($updates, ['sex', 'qq', 'wechat', 'address', 'birthday']);
-            foreach ($userInfos as $key => $value) {
-                if ($key == 'birthday') {
-                    $user->userInfo->birthday = $value ? date('Y-m-d', strtotime($value)) : null;
-                } else {
-                    $user->userInfo->$key = $value;
-                }
-            }
-            $user->userInfo->save();
-            $user->save();
-            Logi::action($admin->id, 'admin_user', $user_id, 'update', '修改了角色信息:'.$user->name, json_encode($updates, JSON_UNESCAPED_UNICODE));
-        });
-        return response()->ok('数据修改成功');
     }
 
+    function updateFillables () {
+        return ['name', 'avatar', 'role_id', 'org_id', 'email', 'mobile', 'account', 'password', 'sex', 'qq', 'wechat', 'address', 'birthday'];
+    }
+
+    function updateCustom (array $updates, User $admin, User $user) {
+        $users = array_only($updates, ['name', 'avatar', 'role_id', 'org_id', 'email', 'mobile', 'account', 'password']);
+        foreach ($users as $key => $value) {
+            if ($key == 'account') {
+                $user->account = $user->org->account . '@' . $value;
+            } else if ($key == 'password') {
+                $user->$key = bcrypt($value);
+            } else {
+                $user->$key = $value;
+            }
+        }
+        $userInfos = array_only($updates, ['sex', 'qq', 'wechat', 'address', 'birthday']);
+        foreach ($userInfos as $key => $value) {
+            if ($key == 'birthday') {
+                $user->userInfo->birthday = $value ? date('Y-m-d', strtotime($value)) : null;
+            } else {
+                $user->userInfo->$key = $value;
+            }
+        }
+        $user->userInfo->save();
+        $user->save();
+    }
 }

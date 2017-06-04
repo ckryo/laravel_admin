@@ -3,11 +3,11 @@
 namespace Ckryo\Laravel\Admin\Controllers;
 
 
-use App\Http\Controllers\Controller;
+use Ckryo\Laravel\App\Http\Controllers\Controller;
 use Ckryo\Laravel\Auth\Auth;
 use Ckryo\Laravel\Admin\Models\Permission;
 use Ckryo\Laravel\Admin\Models\Role;
-use Ckryo\Laravel\Http\Facades\Logi;
+use Ckryo\Laravel\Logi\Facades\Logi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

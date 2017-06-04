@@ -2,12 +2,12 @@
 
 namespace Ckryo\Laravel\Admin\Controllers;
 
-use App\Http\Controllers\Controller;
 use Ckryo\Laravel\Admin\Models\Menu;
 use Ckryo\Laravel\Admin\Models\User;
+use Ckryo\Laravel\App\Http\Controllers\Controller;
 use Ckryo\Laravel\Auth\Auth;
 use Ckryo\Laravel\Handler\ErrorCodeException;
-use Ckryo\Laravel\Http\Facades\Logi;
+use Ckryo\Laravel\Logi\Facades\Logi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
